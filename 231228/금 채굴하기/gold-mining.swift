@@ -21,52 +21,51 @@ struct Mining {
     return goldCount
   }
 }
-
+var visited = [[Bool]]()
+var goldCount = 0
 func kSquare(i: Int, j: Int, k: Int) -> Mining {
-  var cost = 0
-  var goldCount = 0
-  var visited = Array(repeating: Array(repeating: false, count: n), count: n)
+  goldCount = 0
+  visited = Array(repeating: Array(repeating: false, count: 1000), count: 1000)
   visited[i][j] = true
-  cost += 1
   if arr[i][j] == 1 {
     goldCount += 1
   }
   if k != 0 {
-    for idx in 0..<4 {
-      let nx = i + dx[idx]
-      let ny = j + dy[idx]
-      if nx < 0 || ny < 0 || nx >= n || ny >= n || visited[nx][ny] { continue }
-      visited[nx][ny] = true
-      cost += 1
+    confirmK(i: i, j: j, depth: 0, k: k)
+  }
+  let cost = k * k + (k + 1) * (k + 1)
+  let mining = Mining(cost: cost, goldCount: goldCount)
+  return mining
+}
+
+
+func confirmK(i: Int, j: Int, depth: Int, k: Int) {
+  if depth == k {
+    return
+  }
+  for idx in 0..<4 {
+    let nx = i + dx[idx]
+    let ny = j + dy[idx]
+    if nx < 0 || ny < 0 || nx >= n || ny >= n { continue }
+    if !visited[nx][ny] {
       if arr[nx][ny] == 1 {
         goldCount += 1
       }
-      if k == 2 {
-        for idx in 0..<4 {
-          let nnx = nx + dx[idx]
-          let nny = ny + dy[idx]
-          if nnx < 0 || nny < 0 || nnx >= n || nny >= n || visited[nnx][nny] { continue }
-          visited[nnx][nny] = true
-          cost += 1
-          if arr[nnx][nny] == 1 {
-            goldCount += 1
-          }
-        }
-      }
     }
+    visited[nx][ny] = true
+    confirmK(i: nx, j: ny, depth: depth + 1, k: k)
   }
-  let mining = Mining(cost: cost, goldCount: goldCount)
-  return mining
+  return
 }
 
 var result = 0
 
 for i in 0..<n {
   for j in 0..<n {
-    let k0 = kSquare(i: i, j: j, k: 0).profit()
-    let k1 = kSquare(i: i, j: j, k: 1).profit()
-    let k2 = kSquare(i: i, j: j, k: 2).profit()
-    result = max(k0, k1, k2, result)
+    for k in 0..<10 {
+      let kResult = kSquare(i: i, j: j, k: k).profit()
+      result = max(kResult, result)
+    }
   }
 }
 print(result)
