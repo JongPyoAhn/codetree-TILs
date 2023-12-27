@@ -17,14 +17,16 @@ func search() -> Int {
         for j in 0..<n {
             if prevNumber == arr[i][j] {
                 continuousCount += 1
-                if continuousCount == m {
-                    totalSequenceCount += 1
-                    break
-                }
             } else {
                 continuousCount = 1
             }
+
             prevNumber = arr[i][j]
+
+            if continuousCount == m {
+                totalSequenceCount += 1
+                break
+            }
         }
 
         continuousCount = 1
@@ -33,14 +35,14 @@ func search() -> Int {
         for j in 0..<n {
             if prevNumber == arr[j][i] {
                 continuousCount += 1
-                if continuousCount == m {
-                    totalSequenceCount += 1
-                    break
-                }
             } else {
                 continuousCount = 1
             }
             prevNumber = arr[j][i]
+            if continuousCount == m {
+                totalSequenceCount += 1
+                break
+            }
         }
     }
     return totalSequenceCount
