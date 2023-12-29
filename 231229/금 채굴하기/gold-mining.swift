@@ -23,7 +23,7 @@ func simulate() -> Int {
   var result = 0
   let searchedK = searchK()
 
-  for k in 0..<searchedK {
+  for k in 0...searchedK {
     for x1 in 0..<n {
       for y1 in 0..<n {
         let curPoint = Point(x: x1, y: y1)
